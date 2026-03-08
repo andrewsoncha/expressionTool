@@ -1,0 +1,12 @@
+{
+	"emotionImgPaths": 
+		{
+			"happy": "testImgs/happy_square.png",
+			"sad": "testImgs/sad_square.png",
+			"surprised": "testImgs/surprised_square.png",
+			"neutral": "testImgs/neutral_square.png",
+			"fearful": "testImgs/fearful_square.png",
+			"disgust": "testImgs/disgusted_square.png",
+			"angry": "testImgs/angry_square.png"
+		}
+}

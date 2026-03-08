@@ -37,7 +37,7 @@ if __name__ == '__main__':
         quit()
 
     if input_type == 'w' or input_type == 'webcam':
-        webcam_idx = args.webcam_idx
+        webcam_idx = int(args.webcam_idx)
         from webcamModule import webcamModule
         input_module = webcamModule(webcam_idx)
     elif input_type == 'o' or input_type == 'obs':

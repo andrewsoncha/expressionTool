@@ -10,10 +10,10 @@ class windowModule(outputModule):
         if img is None:
             print('windowModule.show: the image is None!')
             return -1
-        if img.isEmpty():
+        if img.shape == ():
             print('windowModule.show: the image is empty!')
             return -1
-        cv2.imshow(windowName, img)
+        cv2.imshow(self.windowName, img)
         keyInput = cv2.waitKey(1)
         if keyInput == 'q':
             return 1

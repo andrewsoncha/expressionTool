@@ -23,7 +23,7 @@ class Core():
             return 0
         if self.debug:
             cv2.imshow('frame', frame)
-            cv2.waitKey(100000)
+            cv2.waitKey(1)
         results = self.detector.detect_emotions(frame)
         if len(results) > 0:
             emotions = results[0]['emotions']

@@ -33,12 +33,12 @@ class Renderer():
         if emotionType not in POSSIBLE_EMOTIONS:
             print('emotion of type {} is not in the list of possible emotions!'.format(emotionType))
             return None
-        renderedImg = emotionImgs[emotionType]
+        renderedImg = self.emotionImgs[emotionType]
 
-        if speakingMode:
+        if self.speakingMode:
             # TODO: Add functionality where the avatar image is grayscaled when the user is not speaking but is colorized when the user is
             pass
-        if bouncingMode:
+        if self.bounceMode:
             # TODO: Add functionality where the avatar image bounces when the user starts speaking
             pass
         return renderedImg
