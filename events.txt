@@ -1,0 +1,13 @@
+{"event_type": "down", "scan_code": 45, "time": 1772999462.3940558, "is_keypad": 0}
+{"event_type": "up", "scan_code": 45, "time": 1772999462.462247, "is_keypad": 0}
+{"event_type": "down", "scan_code": 14, "time": 1772999462.535223, "is_keypad": 0}
+{"event_type": "up", "scan_code": 14, "time": 1772999462.639432, "is_keypad": 0}
+{"event_type": "down", "scan_code": 32, "time": 1772999462.64676, "is_keypad": 0}
+{"event_type": "up", "scan_code": 32, "time": 1772999462.7036328, "is_keypad": 0}
+{"event_type": "down", "scan_code": 17, "time": 1772999462.778717, "is_keypad": 0}
+{"event_type": "up", "scan_code": 17, "time": 1772999462.839797, "is_keypad": 0}
+{"event_type": "down", "scan_code": 15, "time": 1772999462.919431, "is_keypad": 0}
+{"event_type": "up", "scan_code": 15, "time": 1772999462.9876869, "is_keypad": 0}
+{"event_type": "down", "scan_code": 37, "time": 1772999463.150678, "is_keypad": 0}
+{"event_type": "up", "scan_code": 37, "time": 1772999463.21155, "is_keypad": 0}
+{"event_type": "down", "scan_code": 36, "name": "enter", "time": 1772999463.679651, "is_keypad": 0}
