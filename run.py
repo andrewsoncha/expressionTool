@@ -17,20 +17,24 @@ if __name__ == '__main__':
     args = parser.parse_args()
     output_type = args.output_type
     input_type = args.input_type
+    renderImg = True
     
     if output_type == 'h' or output_type == 'hotkey':
         from hotkeyModule import hotkeyModule
+        renderImg = False
         output_module = hotkeyModule()
     elif output_type == 'o' or output_type == 'obs':
         from obsModule import obsOutputModule
         obs_host = args.obs_webserver_host
         obs_pw = args.obs_webserver_password
+        renderImg = True
         if obs_host is None or obs_pw is None:
             print('host or password for the OBS Webserver is not provided! Use -wh and -wp options to provide them!')
             quit()
         output_module = obsOutputModule(obs_host, obs_pw)
     elif output_type == 'w' or output_type == 'windowOutput':
         from windowModule import windowModule
+        renderImg = True
         output_module = windowModule()
     else:
         print("output argument -o must be either hotkey(\'h\'), obs(\'o\'), or window(\'w\')")
@@ -59,15 +63,27 @@ if __name__ == '__main__':
     if os.path.isfile(config_path):
         with open(config_path, 'r') as config_file:
             config_dict = json.load(config_file)
-            if 'emotionImgPaths' in config_dict:
-                readEmotionImgPaths = config_dict['emotionImgPaths']
-                print(readEmotionImgPaths)
-                
-    renderer = Renderer(readEmotionImgPaths)
+            if renderImg:
+                if 'emotionImgPaths' in config_dict:
+                    readEmotionImgPaths = config_dict['emotionImgPaths']
+                    print(readEmotionImgPaths)
+                renderer = Renderer(readEmotionImgPaths)
+            else:
+                if 'emotionHotkeys' in config_dict:
+                    readEmotionHotkeys = config_dict['emotionHotkeys']
+                    print(readEmotionHotkeys)
+                    output_module.updateHotkeys(readEmotionHotkeys)
+
+            
+
 
     isDebug = args.debug
 
-    coreObj = Core(input_module = input_module, renderer=renderer, output_module = output_module, debug = isDebug)
+    if renderImg:
+        coreObj = Core(input_module = input_module, renderer=renderer, output_module = output_module, debug = isDebug)
+    else:
+        coreObj = Core(input_module = input_module, output_module = output_module, renderImg = renderImg, debug = isDebug)
+
     coreObj.run()
 
         

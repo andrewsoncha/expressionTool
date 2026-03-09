@@ -6,12 +6,13 @@ import keyboard
 possibleEmotions = ['happy', 'sad', 'neutral', 'surprised', 'angry', 'fearful', 'disgust']
 
 class Core():
-    def __init__(self, input_module, renderer, output_module, debug=False):
+    def __init__(self, input_module, output_module, renderer=None, renderImg = True, debug=False):
         self.input_module = input_module
         self.renderer = renderer
         self.output_module = output_module
         self.debug = debug
         self.detector = FER()
+        self.renderImg = renderImg
         if debug:
             print('Core.__init__: detector loaded!')
 
@@ -31,8 +32,11 @@ class Core():
             if self.debug:
                 print(emotions)
                 print(maxEmotion)
-            resultImg = self.renderer.renderEmotionImg(maxEmotion)
-            output_code = self.output_module.outputImg(resultImg)
+            if self.renderImg: #Render the avatar images (ex: Window mode or OBS Module)
+                resultImg = self.renderer.renderEmotionImg(maxEmotion)
+                output_code = self.output_module.outputImg(resultImg)
+            else: #Don't render the avatar image (ex: Hotkey Output)
+                output_code = self.output_module.outputHotkey(maxEmotion)
             if output_code == 1: # User hit the halt key
                 return 1;
         return 0
