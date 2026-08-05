@@ -1,0 +1,9 @@
+POSSIBLE_EMOTIONS = ['happy', 'sad', 'neutral', 'surprised', 'angry', 'fearful', 'disgust']
+
+class inputModule():
+    def __init__(self, debug):
+        self.debug = debug
+        pass
+    def getModule(self):
+        pass
+
