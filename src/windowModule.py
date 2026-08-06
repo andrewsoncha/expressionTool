@@ -15,7 +15,7 @@ class windowModule(outputModule):
             return -1
         cv2.imshow(self.windowName, img)
         keyInput = cv2.waitKey(1)
-        if keyInput == 'q':
+        if keyInput == ord('q'):
             return 1
         else:
             return 0

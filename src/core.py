@@ -1,9 +1,9 @@
 from fer.fer import FER
 import cv2
-from time import sleep
+import time
 import keyboard
 
-possibleEmotions = ['happy', 'sad', 'neutral', 'surprised', 'angry', 'fearful', 'disgust']
+possibleEmotions = ['happy', 'sad', 'neutral', 'surprise', 'angry', 'fearful', 'disgust']
 
 class Core():
     def __init__(self, input_module, output_module, renderer=None, renderImg = True, debug=False):
@@ -23,15 +23,17 @@ class Core():
         if frame.size == 0:
             return 0
         if self.debug:
-            cv2.imshow('frame', frame)
+            cv2.imshow('input image', frame)
             cv2.waitKey(1)
         results = self.detector.detect_emotions(frame)
         if len(results) > 0:
             emotions = results[0]['emotions']
             maxEmotion = max(emotions, key=emotions.get)
+            '''
             if self.debug:
-                print(emotions)
-                print(maxEmotion)
+                print('DEBUG: Emotion Values: ', emotions)
+                print('DEBUG: Max Emotion: ', maxEmotion)
+            '''
             if self.renderImg: # Render the avatar images (ex: Window mode or OBS Module)
                 resultImg = self.renderer.renderEmotionImg(maxEmotion)
                 output_code = self.output_module.outputImg(resultImg)
@@ -43,7 +45,16 @@ class Core():
 
     def run(self):
         status = 0
+        if self.debug == True:
+            frameN = 0
+            prevTime = time.time()
         while status==0:
+            frameN += 1
             status = self.oneLoop()
-        input_module.close()
+            if self.debug == True:
+                if time.time() - prevTime > 1:
+                    print('DEBUG: fps = ', frameN)
+                    prevTime = time.time()
+                    frameN = 0
+        self.input_module.close()
 

@@ -22,7 +22,7 @@ def run(config_info: ConfigInfo):
     elif config_info.output_type == 'w' or config_info.output_type == 'windowOutput':
         from src.windowModule import windowModule
         renderImg = True
-        output_module = windowModule()
+        output_module = windowModule(config_info.window_name)
     else:
         print("output argument -o must be either hotkey(\'h\'), obs(\'o\'), or window(\'w\')")
         quit()
@@ -45,7 +45,7 @@ def run(config_info: ConfigInfo):
 
     isDebug = config_info.is_debug
 
-    renderer = Renderer(imgPaths = config_info.avatar_image_info.imagePaths)
+    renderer = Renderer(imgPaths = config_info.avatar_image_info.imagePaths, isDebug = config_info.is_debug)
 
     if renderImg:
         coreObj = Core(input_module = input_module, renderer=renderer, output_module = output_module, debug = isDebug)

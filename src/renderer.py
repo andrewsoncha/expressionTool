@@ -1,9 +1,10 @@
 import cv2
 
-POSSIBLE_EMOTIONS = ['happy', 'sad', 'neutral', 'surprised', 'angry', 'fearful', 'disgust']
+POSSIBLE_EMOTIONS = ['happy', 'sad', 'neutral', 'surprise', 'angry', 'fearful', 'disgust']
 
 class Renderer():
-    def __init__(self, imgPaths=None, speakingMode=False, bounceMode=False):
+    def __init__(self, imgPaths=None, speakingMode=False, bounceMode=False, isDebug=False):
+        self.isDebug = isDebug
         self.emotionImgPaths = {}
         self.emotionImgs = {}
         for emotion in POSSIBLE_EMOTIONS:
@@ -26,8 +27,9 @@ class Renderer():
             print('Could not read image {} for emotion {}!'.format(imgPath, emotionType))
             return
         self.emotionImgs[emotionType] = emotionImg
-        cv2.imshow(emotionType, emotionImg)
-        cv2.waitKey(1)
+        if self.isDebug:
+            cv2.imshow(emotionType, emotionImg)
+            cv2.waitKey(1)
 
     def renderEmotionImg(self, emotionType):
         if emotionType not in POSSIBLE_EMOTIONS:

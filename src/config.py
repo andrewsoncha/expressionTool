@@ -25,7 +25,7 @@ class AvatarImageInfo:
             'happy': 'testImgs/happy_square.png',
             'sad': 'testImgs/sad_square.png',
             'neutral': 'testImgs/neutral_square.png',
-            'surprised': 'testImgs/surprised_square.png',
+            'surprise': 'testImgs/surprised_square.png',
             'angry': 'testImgs/angry_square.png',
             'fearful': 'testImgs/fearful_square.png',
             'disgust': 'testImgs/disgust_square.png'
@@ -39,7 +39,7 @@ class HotkeyInfo:
             'happy': 'h',
             'sad': 's',
             'neutral': 'n',
-            'surprised': 'u',
+            'surprise': 'u',
             'angry': 'a',
             'fearful': 'f',
             'disgust': 'd'
@@ -51,6 +51,7 @@ class ConfigInfo:
     render_img: bool = False
     output_type: str = 'w' # 'w': Window Output    'o': OBS Output  'h': Hotkey Output
     input_type: str = 'w' # 'w': webcam input     'o': obs input
+    window_name: str = 'expressionTool output'
     obs_config_info: ObsConfigInfo = field(default_factory = ObsConfigInfo)
     webcam_info: WebcamInfo = field(default_factory = WebcamInfo)
     avatar_image_info: AvatarImageInfo = field(default_factory = AvatarImageInfo)
