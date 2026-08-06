@@ -22,13 +22,13 @@ class AvatarImageInfo:
     imagePaths: dict[str, str] = field(default_factory=dict)
     def __init__(self):
         self.imagePaths = {
-            'happy': '',
-            'sad': '',
-            'neutral': '',
-            'surprised': '',
-            'angry': '',
-            'fearful': '',
-            'disgust': ''
+            'happy': 'testImgs/happy_square.png',
+            'sad': 'testImgs/sad_square.png',
+            'neutral': 'testImgs/neutral_square.png',
+            'surprised': 'testImgs/surprised_square.png',
+            'angry': 'testImgs/angry_square.png',
+            'fearful': 'testImgs/fearful_square.png',
+            'disgust': 'testImgs/disgust_square.png'
             }
 
 @dataclass

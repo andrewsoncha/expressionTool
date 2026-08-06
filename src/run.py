@@ -43,9 +43,9 @@ def run(config_info: ConfigInfo):
         print('input_module argument -i must be either input(\'i\') or obs(\'o\')')
         quit()
 
-    print('{} is a file? {}'.format(config_path, os.path.isfile(config_path)))
-
     isDebug = config_info.is_debug
+
+    renderer = Renderer(imgPaths = config_info.avatar_image_info.imagePaths)
 
     if renderImg:
         coreObj = Core(input_module = input_module, renderer=renderer, output_module = output_module, debug = isDebug)

@@ -1,5 +1,5 @@
 import cv2
-from inputModule import inputModule
+from src.inputModule import inputModule
 
 class webcamModule(inputModule):
     def __init__(self, webcam_idx=1, debug=False):
