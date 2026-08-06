@@ -1,5 +1,5 @@
 import cv2
-from outputModule import outputModule
+from src.outputModule import outputModule
 
 class windowModule(outputModule):
     def __init__(self, windowName='expressToolOutput'):

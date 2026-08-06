@@ -1,40 +1,40 @@
 import argparse
-from core import Core
-from renderer import Renderer
+from src.core import Core
+from src.renderer import Renderer
 import json
 import os
-from config import runConfigInfo
+from src.config import ConfigInfo
 
-def run(config_info: runConfigInfo):
+def run(config_info: ConfigInfo):
+    renderImg = config_info.render_img
     if config_info.output_type == 'h' or config_info.output_type == 'hotkey':
-        from hotkeyModule import hotkeyModule
+        from src.hotkeyModule import hotkeyModule
         config_info.render_img = False
         output_module = hotkeyModule()
     elif config_info.output_type == 'o' or config_info.output_type == 'obs':
-        from obsModule import obsOutputModule
-        obs_host = args.obs_webserver_host
-        obs_pw = args.obs_webserver_password
-        renderImg = True
+        from src.obsModule import obsOutputModule
+        obs_host = config_info.obs_config_info.obs_webserver_host
+        obs_pw = config_info.obs_config_info.obs_webserver_password
         if obs_host is None or obs_pw is None:
             print('host or password for the OBS Webserver is not provided! Use -wh and -wp options to provide them!')
             quit()
         output_module = obsOutputModule(obs_host, obs_pw)
-    elif output_type == 'w' or output_type == 'windowOutput':
-        from windowModule import windowModule
+    elif config_info.output_type == 'w' or config_info.output_type == 'windowOutput':
+        from src.windowModule import windowModule
         renderImg = True
         output_module = windowModule()
     else:
         print("output argument -o must be either hotkey(\'h\'), obs(\'o\'), or window(\'w\')")
         quit()
 
-    if input_type == 'w' or input_type == 'webcam':
-        webcam_idx = int(args.webcam_idx)
-        from webcamModule import webcamModule
+    if config_info.input_type == 'w' or config_info.input_type == 'webcam':
+        webcam_idx = int(config_info.webcam_info.webcam_idx)
+        from src.webcamModule import webcamModule
         input_module = webcamModule(webcam_idx)
-    elif input_type == 'o' or input_type == 'obs':
-        from obsModule import obsInputModule
-        obs_host = args.obs_webserver_host
-        obs_pw = args.obs_webserver_password
+    elif config_info.input_type == 'o' or config_info.input_type == 'obs':
+        from src.obsModule import obsInputModule
+        obs_host = config_info.obs_config_info.obs_webserver_host
+        obs_pw = config_info.obs_config_info.obs_webserver_password
         if obs_host is None or obs_pw is None:
             print('host or password for the OBS Webserver is not provided! Use -wh and -wp options to provide them!')
             quit()
@@ -45,24 +45,7 @@ def run(config_info: runConfigInfo):
 
     print('{} is a file? {}'.format(config_path, os.path.isfile(config_path)))
 
-    readEmotionImgPaths = {}
-
-    if os.path.isfile(config_path):
-        with open(config_path, 'r') as config_file:
-            config_dict = json.load(config_file)
-            if renderImg:
-                if 'emotionImgPaths' in config_dict:
-                    readEmotionImgPaths = config_dict['emotionImgPaths']
-                    print(readEmotionImgPaths)
-                renderer = Renderer(readEmotionImgPaths)
-            else:
-                if 'emotionHotkeys' in config_dict:
-                    readEmotionHotkeys = config_dict['emotionHotkeys']
-                    print(readEmotionHotkeys)
-                    output_module.updateHotkeys(readEmotionHotkeys)
-
-
-    isDebug = args.debug
+    isDebug = config_info.is_debug
 
     if renderImg:
         coreObj = Core(input_module = input_module, renderer=renderer, output_module = output_module, debug = isDebug)

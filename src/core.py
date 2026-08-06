@@ -2,7 +2,6 @@ from fer.fer import FER
 import cv2
 from time import sleep
 import keyboard
-from config import runConfigInfo
 
 possibleEmotions = ['happy', 'sad', 'neutral', 'surprised', 'angry', 'fearful', 'disgust']
 
