@@ -6,7 +6,6 @@ cl = obs.ReqClient(host='localhost', port=4455)
 currentScene = cl.send('GetCurrentProgramScene', raw=True)
 print('Current Scene: ', currentScene)
 
-
 cl.send('CreateInput', data = {
     'sceneName': 'myScene',
     'inputName': 'My New Image Source2',

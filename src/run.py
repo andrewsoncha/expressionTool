@@ -10,18 +10,26 @@ def run(config_info: ConfigInfo):
     if config_info.output_type == 'h' or config_info.output_type == 'hotkey':
         from src.hotkeyModule import hotkeyModule
         config_info.render_img = False
+        renderImg = False
+        sendImgPath = False
         output_module = hotkeyModule()
     elif config_info.output_type == 'o' or config_info.output_type == 'obs':
         from src.obsModule import obsOutputModule
-        obs_host = config_info.obs_config_info.obs_webserver_host
-        obs_pw = config_info.obs_config_info.obs_webserver_password
+        config_info.render_img = True 
+        renderImg = False
+        sendImgPath = True
+        obs_host = config_info.obs_config_info.obs_host
+        obs_port = config_info.obs_config_info.obs_port
+        obs_pw = config_info.obs_config_info.obs_pw
+        obs_output_source = config_info.obs_config_info.obs_output_source
         if obs_host is None or obs_pw is None:
             print('host or password for the OBS Webserver is not provided! Use -wh and -wp options to provide them!')
             quit()
-        output_module = obsOutputModule(obs_host, obs_pw)
+        output_module = obsOutputModule(obs_host = obs_host, obs_port=obs_port, obs_pw=obs_pw, input_name = config_info.obs_config_info.obs_output_source)
     elif config_info.output_type == 'w' or config_info.output_type == 'windowOutput':
         from src.windowModule import windowModule
         renderImg = True
+        sendImgPath = False
         output_module = windowModule(config_info.window_name)
     else:
         print("output argument -o must be either hotkey(\'h\'), obs(\'o\'), or window(\'w\')")
@@ -47,10 +55,7 @@ def run(config_info: ConfigInfo):
 
     renderer = Renderer(imgPaths = config_info.avatar_image_info.imagePaths, isDebug = config_info.is_debug)
 
-    if renderImg:
-        coreObj = Core(input_module = input_module, renderer=renderer, output_module = output_module, debug = isDebug)
-    else:
-        coreObj = Core(input_module = input_module, output_module = output_module, renderImg = renderImg, debug = isDebug)
+    coreObj = Core(input_module = input_module, renderer = renderer, output_module = output_module, renderImg = renderImg, sendImgPath = sendImgPath, debug = isDebug)
 
     coreObj.run()
 

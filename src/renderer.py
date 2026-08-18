@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 POSSIBLE_EMOTIONS = ['happy', 'sad', 'neutral', 'surprise', 'angry', 'fearful', 'disgust']
 
@@ -31,7 +32,7 @@ class Renderer():
             cv2.imshow(emotionType, emotionImg)
             cv2.waitKey(1)
 
-    def renderEmotionImg(self, emotionType):
+    def renderEmotionImg(self, emotionType) -> np.ndarray:
         if emotionType not in POSSIBLE_EMOTIONS:
             print('emotion of type {} is not in the list of possible emotions!'.format(emotionType))
             return None
@@ -44,4 +45,13 @@ class Renderer():
             # TODO: Add functionality where the avatar image bounces when the user starts speaking
             pass
         return renderedImg
+    
+    def getEmotionImagePath(self, emotionType) -> str:
+        if emotionType not in POSSIBLE_EMOTIONS:
+            print('emotion of type {} is not in the list of possible emotions!'.format(emotionType))
+            return None
+        if emotionType not in self.emotionImgPaths:
+            print('emotion of type {} is not in the keys of self.imgPaths!'.format(emotionTYpe))
+            return None
+        return self.emotionImgPaths[emotionType]
         

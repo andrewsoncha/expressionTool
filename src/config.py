@@ -1,14 +1,17 @@
 import json
 from dataclasses import dataclass, field
+from pathlib import Path
 
 @dataclass
 class ObsConfigInfo:
-    obs_host: str = '127.0.0.1'
+    obs_host: str = 'localhost'
+    obs_port: int = 4455
     obs_pw: str = '' # The password will not be saved in the config file
     obs_input_source: str = 'expressionTool Input Source' # The name of the OBS source that will be fed to this tool
     obs_output_source: str = 'expressionTool Output Source' # The name of the OBS source that this tool will output to
     def __init__(self):
-        self.obs_host = '127.0.0.1'
+        self.obs_host = 'localhost'
+        self.obs_port = 4455
         self.obs_pw = ''
         self.obs_input_source = 'expressionTool Input Source'
         self.obs_output_source = 'expressionTool Output Source'
@@ -21,14 +24,15 @@ class WebcamInfo:
 class AvatarImageInfo:
     imagePaths: dict[str, str] = field(default_factory=dict)
     def __init__(self):
+        base_path = Path(__file__).parent.parent.resolve()
         self.imagePaths = {
-            'happy': 'testImgs/happy_square.png',
-            'sad': 'testImgs/sad_square.png',
-            'neutral': 'testImgs/neutral_square.png',
-            'surprise': 'testImgs/surprised_square.png',
-            'angry': 'testImgs/angry_square.png',
-            'fearful': 'testImgs/fearful_square.png',
-            'disgust': 'testImgs/disgust_square.png'
+            'happy': str(base_path) + '/testImgs/happy_square.png',
+            'sad': str(base_path) + '/testImgs/sad_square.png',
+            'neutral': str(base_path) + '/testImgs/neutral_square.png',
+            'surprise': str(base_path) + '/testImgs/surprise_square.png',
+            'angry': str(base_path) + '/testImgs/angry_square.png',
+            'fearful': str(base_path) + '/testImgs/fearful_square.png',
+            'disgust': str(base_path) + '/testImgs/disgust_square.png'
             }
 
 @dataclass
@@ -49,6 +53,7 @@ class HotkeyInfo:
 class ConfigInfo:
     is_debug: bool = False
     render_img: bool = False
+    send_img_path: bool = False
     output_type: str = 'w' # 'w': Window Output    'o': OBS Output  'h': Hotkey Output
     input_type: str = 'w' # 'w': webcam input     'o': obs input
     window_name: str = 'expressionTool output'
@@ -61,6 +66,11 @@ class ConfigInfo:
         return self
     def setRenderImg(self, input_render_img: bool):
         self.render_img = input_render_img
+        self.send_img_path = not input_render_img
+        return self
+    def setSendPath(self, input_send_img_path: bool):
+        self.send_img_path = input_send_path
+        self.render_img = not input_send_img_path
         return self
     def setOutputType(self, input_output_type: str):
         self.output_type = input_output_type
@@ -91,6 +101,7 @@ class ConfigInfo:
 def writeConfigInfo(configInfo: ConfigInfo, path: str = 'config.json'):
     saveConfigDict = { 'is_debug': configInfo.is_debug, \
             'render_img': configInfo.render_img, \
+            'send_img_path': configInfo.send_img_path, \
             'output_type': configInfo.output_type, \
             'input_type': configInfo.input_type }
 
@@ -121,6 +132,7 @@ def readConfigInfo(path: str = 'config.json') -> ConfigInfo:
             configDict = json.load(f)
             resultConfigInfo.setIsDebug(configDict['is_debug'])
             resultConfigInfo.setRenderImg(configDict['render_img'])
+            resultConfigInfo.setSendPath(configDict['send_img_path'])
             resultConfigInfo.setOutputType(configDict['output_type'])
             resultConfigInfo.setInputType(configDict['input_type'])
             resultConfigInfo.setOBSHost(configDict['obs_config_info']['obs_host'])

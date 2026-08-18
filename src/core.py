@@ -6,18 +6,20 @@ import keyboard
 possibleEmotions = ['happy', 'sad', 'neutral', 'surprise', 'angry', 'fearful', 'disgust']
 
 class Core():
-    def __init__(self, input_module, output_module, renderer=None, renderImg = True, debug=False):
+    def __init__(self, input_module, output_module, renderer=None, renderImg = True, sendImgPath = False, debug=False):
         self.input_module = input_module
         self.renderer = renderer
         self.output_module = output_module
         self.debug = debug
         self.detector = FER()
         self.renderImg = renderImg
+        self.sendImgPath = sendImgPath
         if debug:
             print('Core.__init__: detector loaded!')
 
     def oneLoop(self):
         frame = self.input_module.getFrame()
+        output_code = 0
         if frame is None:
             return 0
         if frame.size == 0:
@@ -34,10 +36,15 @@ class Core():
                 print('DEBUG: Emotion Values: ', emotions)
                 print('DEBUG: Max Emotion: ', maxEmotion)
             '''
-            if self.renderImg: # Render the avatar images (ex: Window mode or OBS Module)
+            if self.renderImg: # Render the avatar images (ex: Window mode or web Module)
                 resultImg = self.renderer.renderEmotionImg(maxEmotion)
                 output_code = self.output_module.outputImg(resultImg)
-            else: # Don't render the avatar image (ex: Hotkey Output)
+            elif self.sendImgPath: # Send the file path to the avatar image (ex: OBS ImageSource Output)
+                imgPath = self.renderer.getEmotionImagePath(maxEmotion)
+                print('imgPath: ', imgPath)
+                if imgPath is not None:
+                    output_code = self.output_module.outputImgPath(imgPath)
+            else: # Press Hotkey instead of Rendering Image (ex: Hotkey Output)
                 output_code = self.output_module.outputHotkey(maxEmotion)
             if output_code == 1: # User hit the halt key
                 return 1;
@@ -49,9 +56,9 @@ class Core():
             frameN = 0
             prevTime = time.time()
         while status==0:
-            frameN += 1
             status = self.oneLoop()
             if self.debug == True:
+                frameN += 1
                 if time.time() - prevTime > 1:
                     print('DEBUG: fps = ', frameN)
                     prevTime = time.time()

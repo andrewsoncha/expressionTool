@@ -1,12 +1,13 @@
 import cv2
+import numpy as np
 from src.outputModule import outputModule
 
 class windowModule(outputModule):
-    def __init__(self, windowName='expressToolOutput'):
+    def __init__(self, windowName:str ='expressToolOutput'):
         self.windowName = windowName
         cv2.namedWindow(windowName, cv2.WINDOW_AUTOSIZE)
 
-    def outputImg(self, img):
+    def outputImg(self, img: np.ndarray) -> int:
         if img is None:
             print('windowModule.show: the image is None!')
             return -1
