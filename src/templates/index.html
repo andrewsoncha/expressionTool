@@ -1,0 +1,25 @@
+<DOCTYPE html>
+<html>
+	<head>
+		<title>ExpressionTool</title>
+	</head>
+	<body>
+		<img id = "avatarImg" alt="Avatar Image">
+
+		<script>
+			async function pollImg() {
+				try {
+					const response = await fetch('/avatarImg');
+					const data = await response.json();
+					console.log("Polled Img: ", data);
+					const imgElement = document.getElementById('avatarImg');
+					imgElement.src = data;
+				} catch (e) {
+					console.error("Polling error: ", e);
+				}
+				setTimeout(pollImg, 100);
+			}
+			pollImg();
+		</script>
+	</body>
+</html>

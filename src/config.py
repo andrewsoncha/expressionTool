@@ -3,6 +3,12 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 @dataclass
+class WebserverInfo:
+    port: int = 5000
+    def __init__(self):
+        self.port = 5000
+
+@dataclass
 class ObsConfigInfo:
     obs_host: str = 'localhost'
     obs_port: int = 4455
@@ -57,6 +63,7 @@ class ConfigInfo:
     output_type: str = 'w' # 'w': Window Output    'o': OBS Output  'h': Hotkey Output
     input_type: str = 'w' # 'w': webcam input     'o': obs input
     window_name: str = 'expressionTool output'
+    webserver_info: WebserverInfo = field(default_factory = WebserverInfo)
     obs_config_info: ObsConfigInfo = field(default_factory = ObsConfigInfo)
     webcam_info: WebcamInfo = field(default_factory = WebcamInfo)
     avatar_image_info: AvatarImageInfo = field(default_factory = AvatarImageInfo)
@@ -81,6 +88,9 @@ class ConfigInfo:
         return self
     def setInputType(self, input_input_type: str):
         self.input_type = input_input_type
+        return self
+    def setWebserverPort(self, input_webserver_port: int):
+        self.webserver_info.port = input_webserver_port
         return self
     def setOBSHost(self, input_obs_host: str):
         self.obs_config_info.obs_host = input_obs_host

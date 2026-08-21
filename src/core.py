@@ -31,17 +31,14 @@ class Core():
         if len(results) > 0:
             emotions = results[0]['emotions']
             maxEmotion = max(emotions, key=emotions.get)
-            '''
             if self.debug:
                 print('DEBUG: Emotion Values: ', emotions)
                 print('DEBUG: Max Emotion: ', maxEmotion)
-            '''
             if self.renderImg: # Render the avatar images (ex: Window mode or web Module)
                 resultImg = self.renderer.renderEmotionImg(maxEmotion)
                 output_code = self.output_module.outputImg(resultImg)
             elif self.sendImgPath: # Send the file path to the avatar image (ex: OBS ImageSource Output)
                 imgPath = self.renderer.getEmotionImagePath(maxEmotion)
-                print('imgPath: ', imgPath)
                 if imgPath is not None:
                     output_code = self.output_module.outputImgPath(imgPath)
             else: # Press Hotkey instead of Rendering Image (ex: Hotkey Output)

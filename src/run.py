@@ -31,8 +31,14 @@ def run(config_info: ConfigInfo):
         renderImg = True
         sendImgPath = False
         output_module = windowModule(config_info.window_name)
+    elif config_info.output_type == 'ws' or config_info.output_type == 'webserver':
+        from src.webModule import webOutputModule
+        renderImg = True
+        sendImgPath = False
+        port = config_info.webserver_info.port
+        output_module = webOutputModule(config_info.window_name, port=port)
     else:
-        print("output argument -o must be either hotkey(\'h\'), obs(\'o\'), or window(\'w\')")
+        print("output argument -o must be either hotkey(\'h\'), obs(\'o\'), window(\'w\'), or webserver(\'ws\'). ")
         quit()
 
     if config_info.input_type == 'w' or config_info.input_type == 'webcam':
