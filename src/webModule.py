@@ -21,6 +21,12 @@ def startServer(port):
     print('INFO webOutputModule.py:  app.run(port={})'.format(port))
     app.run(host='127.0.0.1', port=port)
 
+# There is probably a much better way to do this than having the webpage
+# poll for the avatar images and sending them as jpg base 64 encodings
+# but I can't really think right now so please fix this Future Andrew
+# Maybe a streaming protocol? Would this be overkill?
+# Maybe have the avatar images be saved in memory and have the browser
+# display them? But then how would the effects be rendered?
 class webOutputModule(outputModule):
     def __init__(self, tabName:str = 'expressToolOutput', port:int = 5000):
         self.tabName = tabName
