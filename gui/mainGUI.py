@@ -26,6 +26,8 @@ class Ui_MainWindow(object):
                 self.emotion_textline_inputs[previous_toggled_emotion].setDisabled(True)
             if self.current_toggled_emotion in self.emotion_textline_inputs:
                 self.emotion_textline_inputs[self.current_toggled_emotion].setDisabled(False)
+            pixmap = QPixmap(self.emotion_image_paths[self.current_toggled_emotion])
+            self.imageLabel.setPixmap(pixmap)
         return emotionImageToggleAction
 
     def setupUi(self, MainWindow):
@@ -111,11 +113,9 @@ class Ui_MainWindow(object):
 
         self.emotionVerticalLayout = QtWidgets.QVBoxLayout()
         self.emotionSelectButton = QtWidgets.QButtonGroup(self.emotionVerticalLayout)
-        self.emotionPath = {}
         for emotion in POSSIBLE_EMOTIONS:
             emotionHorizontalLayout = QtWidgets.QHBoxLayout()
             emotionSelectBtn = QtWidgets.QRadioButton(emotion+' Image File Path')
-            emotionSelectBtn.toggled.connect(self.getEmotionImageToggleAction(emotion))
             self.emotionSelectButton.addButton(emotionSelectBtn)
             emotionPathEdit = QtWidgets.QLineEdit('')
             emotionHorizontalLayout.addWidget(emotionSelectBtn)
@@ -159,6 +159,9 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(parent=MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        for emotion in POSSIBLE_EMOTIONS:
+            self.emotion_radio_buttons[emotion].toggled.connect(self.getEmotionImageToggleAction(emotion))
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
