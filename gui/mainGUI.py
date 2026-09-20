@@ -126,6 +126,11 @@ class Ui_MainWindow(object):
 
         self.emotion_radio_buttons[POSSIBLE_EMOTIONS[0]].setChecked(True)
 
+        self.openFileDialogBtn = QtWidgets.QPushButton('Select File')
+        self.openFileDialogBtn.setObjectName('Select File')
+        self.openFileDialogBtn.clicked.connect(self.openFileDialog)
+        self.emotionVerticalLayout.addWidget(self.openFileDialogBtn)
+
         self.ioVerticalLayout.addLayout(self.emotionVerticalLayout)
 
         self.listWidget_2 = QtWidgets.QListWidget(parent=self.centralwidget)
@@ -144,11 +149,11 @@ class Ui_MainWindow(object):
         self.tableView.setObjectName("tableView")
         self.horizontalLayout.addWidget(self.tableView)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.pushButton = QtWidgets.QPushButton('Launch', parent=self.centralwidget)
-        self.pushButton.setObjectName("Launch")
-        self.pushButton.clicked.connect(self.openFileDialog)
+        self.launchButton = QtWidgets.QPushButton('Launch', parent=self.centralwidget)
+        self.launchButton.setObjectName("Launch")
+        self.launchButton.clicked.connect(self.launch)
 
-        self.verticalLayout.addWidget(self.pushButton)
+        self.verticalLayout.addWidget(self.launchButton)
         self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -169,7 +174,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "expressionTool GUI"))
-        self.pushButton.setText(_translate("MainWindow", "Launch"))
 
     def openFileDialog(self):
         print('openFileDialog')
@@ -185,6 +189,9 @@ class Ui_MainWindow(object):
             self.emotion_image_paths[self.current_toggled_emotion] = selectedFiles[0]
             pixmap = QPixmap(selectedFiles[0])
             self.imageLabel.setPixmap(pixmap)
+
+    def launch(self):
+        pass
 
 
 if __name__ == "__main__":
