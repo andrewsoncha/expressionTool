@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 from src.run import run
-from src.config import ConfigInfo, writeConfigInfo
+from src.config import ConfigInfo, readConfigInfo, writeConfigInfo
 
 config_path = './config.json'
 

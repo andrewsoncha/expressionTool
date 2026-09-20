@@ -60,8 +60,8 @@ class ConfigInfo:
     is_debug: bool = False
     render_img: bool = False
     send_img_path: bool = False
-    output_type: str = 'w' # 'w': Window Output    'o': OBS Output  'h': Hotkey Output
-    input_type: str = 'w' # 'w': webcam input     'o': obs input
+    output_type: str = 'w' # 'w': Window Output    'o': OBS Output  'h': Hotkey Output   'ws': webserver Output
+    input_type: str = 'w' # 'w': webcam input     'o': obs input     
     window_name: str = 'expressionTool output'
     webserver_info: WebserverInfo = field(default_factory = WebserverInfo)
     obs_config_info: ObsConfigInfo = field(default_factory = ObsConfigInfo)
@@ -76,7 +76,7 @@ class ConfigInfo:
         self.send_img_path = not input_render_img
         return self
     def setSendPath(self, input_send_img_path: bool):
-        self.send_img_path = input_send_path
+        self.send_img_path = input_send_img_path
         self.render_img = not input_send_img_path
         return self
     def setOutputType(self, input_output_type: str):
@@ -114,6 +114,9 @@ def writeConfigInfo(configInfo: ConfigInfo, path: str = 'config.json'):
             'send_img_path': configInfo.send_img_path, \
             'output_type': configInfo.output_type, \
             'input_type': configInfo.input_type }
+    
+    if configInfo.input_type == 'w':
+        saveConfigDict['webcam_idx'] = configInfo.webcam_info.webcam_idx
 
     # If the set input or output type is OBS, save OBS Websocket Host data.
     # The OBS Websocket Password will not be saved
@@ -123,7 +126,8 @@ def writeConfigInfo(configInfo: ConfigInfo, path: str = 'config.json'):
                 'obs_output_source': configInfo.obs_config_info.obs_output_source,
                 'obs_input_source': configInfo.obs_config_info.obs_input_source,
                 }
-    saveConfigDict['hotkey_info'] = configInfo.hotkey_info.hotkeyInfo
+    if configInfo.output_type == 'h' or configInfo.input_type == 'h':
+        saveConfigDict['hotkey_info'] = configInfo.hotkey_info.hotkeyInfo
 
     saveConfigDict['avatar_image_info'] = configInfo.avatar_image_info.imagePaths
 
@@ -145,10 +149,14 @@ def readConfigInfo(path: str = 'config.json') -> ConfigInfo:
             resultConfigInfo.setSendPath(configDict['send_img_path'])
             resultConfigInfo.setOutputType(configDict['output_type'])
             resultConfigInfo.setInputType(configDict['input_type'])
-            resultConfigInfo.setOBSHost(configDict['obs_config_info']['obs_host'])
-            resultConfigInfo.setOBSOutputSource(configDict['obs_config_info']['obs_output_source'])
-            resultConfigInfo.setOBSInputSource(configDict['obs_config_info']['obs_input_source'])
-            resultConfigInfo.hotkey_info.hotkeyInfo = configDict['hotkey_info']
+            if resultConfigInfo.input_type == 'w': # If input is webcam input, get webcam idx
+                resultConfigInfo.setWebcamIdx(configDict['webcam_idx'])
+            if resultConfigInfo.output_type == 'o' or resultConfigInfo.input_type == 'o':
+                resultConfigInfo.setOBSHost(configDict['obs_config_info']['obs_host'])
+                resultConfigInfo.setOBSOutputSource(configDict['obs_config_info']['obs_output_source'])
+                resultConfigInfo.setOBSInputSource(configDict['obs_config_info']['obs_input_source'])
+            if resultConfigInfo.output_type == 'h' or resultConfigInfo.input_type == 'h':
+                resultConfigInfo.hotkey_info.hotkeyInfo = configDict['hotkey_info']
             resultConfigInfo.avatar_image_info.impagePaths = configDict['avatar_image_info']
     except FileNotFoundError:
         print('config.py readConfigInfo ERROR: Could not find file {}'.format(path))

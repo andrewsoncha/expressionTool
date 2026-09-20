@@ -9,6 +9,8 @@ from PyQt6.QtGui import QPixmap
 from PyQt6 import QtCore, QtGui, QtWidgets
 import cv2
 from cv2_enumerate_cameras import enumerate_cameras
+import subprocess
+from src.config import ConfigInfo, writeConfigInfo
 
 POSSIBLE_EMOTIONS = ['happy', 'sad', 'neutral', 'surprise', 'angry', 'fearful', 'disgust']
 class Ui_MainWindow(object):
@@ -191,8 +193,50 @@ class Ui_MainWindow(object):
             self.imageLabel.setPixmap(pixmap)
 
     def launch(self):
-        pass
+        config_dict = {}
+        input_method = ''
+        output_method = ''
+        webcamIdx = 0
+        obsInputSource = ''
+        obsOutputSource = ''
+        
+        # Check input method
+        if self.webcamInputBtn.isChecked():
+            input_method = 'w'
+            webcamIdx = self.webcamCombo.currentIndex()
+        elif self.obsInputBtn.isChecked():
+            input_method = 'o'
+            obsInputSource = self.obsInputEdit.toPlainText()
+        elif self.hotkeyInputBtn.isChecked():
+            input_method = 'h'
 
+        # Check output method
+        if self.windowOutputBtn.isChecked():
+            output_method = 'w'
+        elif self.obsOutputBtn.isChecked():
+            output_method = 'o'
+            obsOutputSource = self.obsOutputEdit.toPlainText()
+        elif self.webserverOutputBtn.isChecked():
+            output_method = 'ws'
+        elif self.hotkeyOutputBtn.isChecked():
+            output_method = 'h'
+
+        config_info = ConfigInfo()
+        config_info.setIsDebug(True)
+        config_info.setInputType(input_method)
+        config_info.setOutputType(output_method)
+        if input_method == 'w':
+            config_info.setWebcamIdx(webcamIdx)
+        if input_method == 'o':
+            config_info.setOBSOutputSource(obsInputSource)
+        if output_method == 'o':
+            config_info.setOBSInputSource(obsOutputSource)
+
+        config_info.avatar_image_info.image_paths = self.emotion_image_paths
+
+        writeConfigInfo(config_info)
+        subprocess.Popen(['python3', 'run-cli.py', '-c', 'config.json'])
+        exit(1)
 
 if __name__ == "__main__":
     import sys
